@@ -12,8 +12,6 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
-    private val defaultShadowColor = Color.BLACK
-
     private val defaultRectBackgroundColor = Color.WHITE
 
     private val shadowPaint = Paint()
@@ -34,7 +32,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     private val porterDuffXferMode = PorterDuffXfermode(PorterDuff.Mode.SRC)
 
-    private var shadowColor = defaultShadowColor
+    private var shadowColor = Color.BLACK
 
     private var shadowStrokeWidth = context.dpToPixelFloat(dp = 8)
 
