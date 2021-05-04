@@ -223,9 +223,9 @@ class SelectableShadowPositionView @JvmOverloads constructor(
         shadowEndPath.apply {
             reset()
             moveTo((width + shadowEndOffset), (height + shadowBottomOffset))
-            lineTo((width + shadowEndOffset), (shadowStartY + shadowTopOffset))
+            lineTo((width + shadowEndOffset), shadowStartY + shadowTopOffset)
         }
-        canvas.drawPath(shadowBottomPath, shadowPaint)
+        canvas.drawPath(shadowEndPath, shadowPaint)
         canvas.save()
     }
 
