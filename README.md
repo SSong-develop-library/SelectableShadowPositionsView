@@ -20,6 +20,17 @@
     <com.ssong_develop.selectableshadowpositionview.SelectableShadowPositionView
         android:layout_width="200dp"
         android:layout_height="200dp"
+        app:cornerRadius="16dp"
+        app:shadowStrokeWidth="8dp"
+        app:blurRadius="16dp"
+        app:enableShadowTop="true"
+        app:enableShadowStart="true"
+        app:enableShadowEnd="true"
+        app:enableShadowBottom="true"
+        app:enableBorder="true"
+        app:enableShadow="true"
+        app:borderColor="@color/black"
+        app:shadowColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,31 +48,19 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
     </com.ssong_develop.selectableshadowpositionview.SelectableShadowPositionView>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-in parentView of SelectableShadowPositionView , must clipChildren check 'false'!!!!
-if you do not this, it can't show shadow to your view
-and it will provide default 'blur Radius' or 'blurStrokeWidth' etc....
-You can controll attributes like
-topOffset 
-bottomOffset
-startOffset
-endOffset
-shadowStartY
-shadowColor
-shadowStrokeWidth
-cornerRadius
-borderHeight
-borderColor
-
-enableShadow
-enableBorder
-enableShadowTop
-enableShadowBottom
-enableShadowStart
-enableShadowEnd
 ```
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### sample
+
+<div>
+    
+</div>
+
+
+
+-------------------------------------------------------------
 
 
 
