@@ -88,7 +88,7 @@ enableShadowEnd
 
 ```
 	dependencies {
-	        implementation 'com.github.SSong-develop:SelectableShadowPositionsView:1.0.0'
+	        implementation 'com.github.SSong-develop:SelectableShadowPositionsView:1.0.1'
 	}
 ```
 
