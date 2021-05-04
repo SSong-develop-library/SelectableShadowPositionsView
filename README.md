@@ -55,6 +55,9 @@
 ### sample
 
 <div>
+<img src="https://github.com/SSong-develop/SelectableShadowPositionsView/blob/master/sample_default.png" width="300" height="500" />
+    
+    
     
 </div>
 
@@ -87,7 +90,7 @@
 
 ```
 	dependencies {
-	        implementation 'com.github.SSong-develop:SelectableShadowPositionsView:1.0.1'
+	        implementation 'com.github.SSong-develop:SelectableShadowPositionsView:1.0.1-alpha02'
 	}
 ```
 
