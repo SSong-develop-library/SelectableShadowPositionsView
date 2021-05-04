@@ -259,7 +259,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
         }
 
         borderRectF.apply {
-            top = height - borderHeight
+            top = 0f
             left = 0f
             right = width.toFloat()
             bottom = height.toFloat()
