@@ -55,10 +55,11 @@
 ### sample
 
 <div>
-<img src="https://github.com/SSong-develop/SelectableShadowPositionsView/blob/master/sample_default.png" width="300" height="500" />
-    
-    
-    
+<img src="https://github.com/SSong-develop/SelectableShadowPositionsView/blob/master/sample_default.png" width="300" height="650" /> 
+<img src="https://github.com/SSong-develop/SelectableShadowPositionsView/blob/master/sample_no_bottom.png" width="300" height="650" /> 
+<img src="https://github.com/SSong-develop/SelectableShadowPositionsView/blob/master/sample_no_end.png" width="300" height="650" /> 
+<img src="https://github.com/SSong-develop/SelectableShadowPositionsView/blob/master/sample_no_start.png" width="300" height="650" /> 
+
 </div>
 
 
