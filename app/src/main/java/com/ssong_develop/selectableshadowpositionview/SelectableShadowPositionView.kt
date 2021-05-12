@@ -51,7 +51,6 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     private var enableShadowBottom = true
     private var enableShadowStart = true
     private var enableShadowEnd = true
-    private var borderHeight = 0f
     private var cornerRadius = context.dpToPixelFloat(dp = 16)
 
     private val blurMaskFilter = BlurMaskFilter(blurRadius, BlurMaskFilter.Blur.NORMAL)
@@ -65,74 +64,70 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     private fun getStyleableAttrs(attrs: AttributeSet) {
         context.obtainStyledAttributes(attrs, R.styleable.SelectableShadowPositionView, 0, 0).use {
             shadowTopOffset = it.getDimension(
-                R.styleable.SelectableShadowPositionView_shadowTopOffset,
+                R.styleable.SelectableShadowPositionView_shadow_top_offset,
                 context.dpToPixelFloat(0)
             )
             shadowBottomOffset = it.getDimension(
-                R.styleable.SelectableShadowPositionView_shadowBottomOffset,
+                R.styleable.SelectableShadowPositionView_shadow_bottom_offset,
                 context.dpToPixelFloat(0)
             )
             shadowStartOffset = it.getDimension(
-                R.styleable.SelectableShadowPositionView_shadowStartOffset,
+                R.styleable.SelectableShadowPositionView_shadow_start_offset,
                 context.dpToPixelFloat(0)
             )
             shadowEndOffset = it.getDimension(
-                R.styleable.SelectableShadowPositionView_shadowEndOffset,
+                R.styleable.SelectableShadowPositionView_shadow_end_offset,
                 context.dpToPixelFloat(0)
             )
-            shadowStartY = it.getDimension(
-                R.styleable.SelectableShadowPositionView_shadowStartY,
-                MIN_VALUE
-            )
             shadowStrokeWidth = it.getDimension(
-                R.styleable.SelectableShadowPositionView_shadowStrokeWidth,
+                R.styleable.SelectableShadowPositionView_shadow_stroke_width,
                 context.dpToPixelFloat(4)
             )
             cornerRadius = it.getDimension(
-                R.styleable.SelectableShadowPositionView_cornerRadius,
+                R.styleable.SelectableShadowPositionView_corner_radius,
                 context.dpToPixelFloat(4)
             )
             blurRadius = it.getDimension(
-                R.styleable.SelectableShadowPositionView_blurRadius,
+                R.styleable.SelectableShadowPositionView_blur_radius,
                 context.dpToPixelFloat(16)
             )
-            borderHeight = it.getDimension(
-                R.styleable.SelectableShadowPositionView_borderHeight,
-                0f
-            )
             shadowColor = it.getColor(
-                R.styleable.SelectableShadowPositionView_shadowColor,
+                R.styleable.SelectableShadowPositionView_shadow_color,
                 Color.BLACK
             )
             borderColor = it.getColor(
-                R.styleable.SelectableShadowPositionView_borderColor,
+                R.styleable.SelectableShadowPositionView_border_color,
                 Color.BLACK
             )
             enableShadow = it.getBoolean(
-                R.styleable.SelectableShadowPositionView_enableShadow,
+                R.styleable.SelectableShadowPositionView_enable_shadow,
                 true
             )
             enableBorder = it.getBoolean(
-                R.styleable.SelectableShadowPositionView_enableBorder,
+                R.styleable.SelectableShadowPositionView_enable_border,
                 false
             )
             enableShadowTop = it.getBoolean(
-                R.styleable.SelectableShadowPositionView_enableShadowTop,
+                R.styleable.SelectableShadowPositionView_enable_shadow_top,
                 false
             )
             enableShadowBottom = it.getBoolean(
-                R.styleable.SelectableShadowPositionView_enableShadowBottom,
+                R.styleable.SelectableShadowPositionView_enable_shadow_bottom,
                 true
             )
             enableShadowStart = it.getBoolean(
-                R.styleable.SelectableShadowPositionView_enableShadowStart,
+                R.styleable.SelectableShadowPositionView_enable_shadow_start,
                 true
             )
             enableShadowEnd = it.getBoolean(
-                R.styleable.SelectableShadowPositionView_enableShadowEnd,
+                R.styleable.SelectableShadowPositionView_enable_shadow_end,
                 true
             )
         }
+    }
+
+    private fun updateBackground(){
+
     }
 
     override fun dispatchDraw(canvas: Canvas) {
