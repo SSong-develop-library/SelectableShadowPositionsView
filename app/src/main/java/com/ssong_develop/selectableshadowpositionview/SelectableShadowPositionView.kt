@@ -212,7 +212,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     private fun drawLayoutBackground(canvas: Canvas) {
         layoutPaint.apply {
             style = Paint.Style.FILL
-            color = Color.WHITE
+            color = layoutBackgroundColor
             xfermode = porterDuffXferMode
         }
 
