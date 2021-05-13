@@ -9,7 +9,6 @@ import androidx.core.content.res.use
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.ssong_develop.selectableshadowpositionview.Utils.dpToPixelFloat
-import java.lang.Float.MIN_VALUE
 
 class SelectableShadowPositionView @JvmOverloads constructor(
     context: Context,
@@ -25,10 +24,8 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     private val shadowEndPath = Path()
 
     private val layoutBackgroundPath = Path()
-    private val clipPath = Path()
 
     private val borderRectF = RectF()
-    private val clipRectF = RectF()
     private val layoutBackgroundRectF = RectF()
 
     private val porterDuffXferMode = PorterDuffXfermode(PorterDuff.Mode.SRC)
@@ -39,7 +36,6 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     private var borderColor = Color.BLACK
     private var blurRadius = context.dpToPixelFloat(dp = 16)
-    private var shadowStartY = MIN_VALUE
     private var shadowStartOffset = 0f
     private var shadowEndOffset = 0f
     private var shadowTopOffset = 0f
@@ -47,7 +43,6 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     private var enableShadow = true
     private var enableBorder = false
-
     private var enableShadowTop = true
     private var enableShadowBottom = true
     private var enableShadowStart = true
@@ -55,13 +50,14 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     private val blurMaskFilter = BlurMaskFilter(blurRadius, BlurMaskFilter.Blur.NORMAL)
 
-    var cornerRadius by OnChangeProp(context.dpToPixelFloat(16)){
+    var cornerRadius by OnChangeProp(context.dpToPixelFloat(16)) {
         updateBackground()
     }
 
-    var layoutBackgroundColor by OnChangeProp(Color.WHITE){
+    var layoutBackgroundColor by OnChangeProp(Color.WHITE) {
         updateBackground()
     }
+
     init {
         if (attrs != null)
             getStyleableAttrs(attrs)
@@ -137,15 +133,11 @@ class SelectableShadowPositionView @JvmOverloads constructor(
         }
     }
 
-    private fun updateBackground(){
-        background = MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(cornerRadius)).apply {
-            fillColor = ColorStateList.valueOf(layoutBackgroundColor)
-        }
-    }
-
-    override fun dispatchDraw(canvas: Canvas) {
-        /*clipRoundCorner(canvas)*/
-        super.dispatchDraw(canvas)
+    private fun updateBackground() {
+        background =
+            MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(cornerRadius)).apply {
+                fillColor = ColorStateList.valueOf(layoutBackgroundColor)
+            }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -158,18 +150,6 @@ class SelectableShadowPositionView @JvmOverloads constructor(
             drawBorder(canvas)
         super.onDraw(canvas)
     }
-
-/*    private fun clipRoundCorner(canvas: Canvas) {
-        clipPath.reset()
-
-        clipRectF.apply {
-            top = 0f
-            left = 0f
-            right = canvas.width.toFloat()
-            bottom = canvas.height.toFloat()
-        }
-        clipPath.addRoundRect(clipRectF, cornerRadius, cornerRadius, Path.Direction.CW)
-    }*/
 
     private fun initializeShadowPaint() {
         shadowPaint.apply {
@@ -192,8 +172,8 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     private fun drawShadowTop(canvas: Canvas) {
         shadowTopPath.apply {
             reset()
-            moveTo((width + shadowEndOffset), (shadowStartY + shadowTopOffset))
-            lineTo(shadowStartOffset, (shadowStartY + shadowTopOffset))
+            moveTo((width + shadowEndOffset), shadowTopOffset)
+            lineTo(shadowStartOffset, shadowTopOffset)
         }
         canvas.drawPath(shadowTopPath, shadowPaint)
         canvas.save()
@@ -202,7 +182,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     private fun drawShadowStart(canvas: Canvas) {
         shadowStartPath.apply {
             reset()
-            moveTo(shadowStartOffset, (shadowStartY + shadowTopOffset))
+            moveTo(shadowStartOffset, shadowTopOffset)
             lineTo(shadowStartOffset, (height + shadowBottomOffset))
         }
         canvas.drawPath(shadowStartPath, shadowPaint)
@@ -223,7 +203,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
         shadowEndPath.apply {
             reset()
             moveTo((width + shadowEndOffset), (height + shadowBottomOffset))
-            lineTo((width + shadowEndOffset), shadowStartY + shadowTopOffset)
+            lineTo((width + shadowEndOffset), shadowTopOffset)
         }
         canvas.drawPath(shadowEndPath, shadowPaint)
         canvas.save()
