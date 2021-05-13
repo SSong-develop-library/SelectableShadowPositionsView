@@ -1,10 +1,13 @@
 package com.ssong_develop.selectableshadowpositionview
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.*
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.ssong_develop.selectableshadowpositionview.Utils.dpToPixelFloat
 import java.lang.Float.MIN_VALUE
 
@@ -12,8 +15,6 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
 ) : ConstraintLayout(context, attrs) {
-    private val defaultRectBackgroundColor = Color.WHITE
-
     private val shadowPaint = Paint()
     private val borderPaint = Paint()
     private val layoutPaint = Paint()
@@ -47,37 +48,43 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     private var enableShadow = true
     private var enableBorder = false
 
-    private var enableShadowTop = false
+    private var enableShadowTop = true
     private var enableShadowBottom = true
     private var enableShadowStart = true
     private var enableShadowEnd = true
-    private var cornerRadius = context.dpToPixelFloat(dp = 16)
 
     private val blurMaskFilter = BlurMaskFilter(blurRadius, BlurMaskFilter.Blur.NORMAL)
 
+    var cornerRadius by OnChangeProp(context.dpToPixelFloat(16)){
+        updateBackground()
+    }
+
+    var layoutBackgroundColor by OnChangeProp(Color.WHITE){
+        updateBackground()
+    }
     init {
-        setBackgroundColor(defaultRectBackgroundColor)
         if (attrs != null)
             getStyleableAttrs(attrs)
+        updateBackground()
     }
 
     private fun getStyleableAttrs(attrs: AttributeSet) {
         context.obtainStyledAttributes(attrs, R.styleable.SelectableShadowPositionView, 0, 0).use {
             shadowTopOffset = it.getDimension(
                 R.styleable.SelectableShadowPositionView_shadow_top_offset,
-                context.dpToPixelFloat(0)
+                context.dpToPixelFloat(1)
             )
             shadowBottomOffset = it.getDimension(
                 R.styleable.SelectableShadowPositionView_shadow_bottom_offset,
-                context.dpToPixelFloat(0)
+                context.dpToPixelFloat(1)
             )
             shadowStartOffset = it.getDimension(
                 R.styleable.SelectableShadowPositionView_shadow_start_offset,
-                context.dpToPixelFloat(0)
+                context.dpToPixelFloat(1)
             )
             shadowEndOffset = it.getDimension(
                 R.styleable.SelectableShadowPositionView_shadow_end_offset,
-                context.dpToPixelFloat(0)
+                context.dpToPixelFloat(1)
             )
             shadowStrokeWidth = it.getDimension(
                 R.styleable.SelectableShadowPositionView_shadow_stroke_width,
@@ -95,6 +102,10 @@ class SelectableShadowPositionView @JvmOverloads constructor(
                 R.styleable.SelectableShadowPositionView_shadow_color,
                 Color.BLACK
             )
+            layoutBackgroundColor = it.getColor(
+                R.styleable.SelectableShadowPositionView_card_background_color,
+                Color.WHITE
+            )
             borderColor = it.getColor(
                 R.styleable.SelectableShadowPositionView_border_color,
                 Color.BLACK
@@ -109,7 +120,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
             )
             enableShadowTop = it.getBoolean(
                 R.styleable.SelectableShadowPositionView_enable_shadow_top,
-                false
+                true
             )
             enableShadowBottom = it.getBoolean(
                 R.styleable.SelectableShadowPositionView_enable_shadow_bottom,
@@ -127,18 +138,19 @@ class SelectableShadowPositionView @JvmOverloads constructor(
     }
 
     private fun updateBackground(){
-
+        background = MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(cornerRadius)).apply {
+            fillColor = ColorStateList.valueOf(layoutBackgroundColor)
+        }
     }
 
     override fun dispatchDraw(canvas: Canvas) {
-        clipRoundCorner(canvas)
+        /*clipRoundCorner(canvas)*/
         super.dispatchDraw(canvas)
     }
 
     override fun onDraw(canvas: Canvas) {
         if (enableShadow) {
             initializeShadowPaint()
-            initializeShadowOffset()
             drawShadow(canvas)
         }
         drawLayoutBackground(canvas)
@@ -147,7 +159,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
         super.onDraw(canvas)
     }
 
-    private fun clipRoundCorner(canvas: Canvas) {
+/*    private fun clipRoundCorner(canvas: Canvas) {
         clipPath.reset()
 
         clipRectF.apply {
@@ -157,7 +169,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
             bottom = canvas.height.toFloat()
         }
         clipPath.addRoundRect(clipRectF, cornerRadius, cornerRadius, Path.Direction.CW)
-    }
+    }*/
 
     private fun initializeShadowPaint() {
         shadowPaint.apply {
@@ -168,13 +180,6 @@ class SelectableShadowPositionView @JvmOverloads constructor(
             xfermode = porterDuffXferMode
             maskFilter = blurMaskFilter
         }
-    }
-
-    private fun initializeShadowOffset() {
-        shadowTopOffset = context.dpToPixelFloat(6)
-        shadowBottomOffset = context.dpToPixelFloat(-2)
-        shadowStartOffset = context.dpToPixelFloat(2)
-        shadowEndOffset = context.dpToPixelFloat(-2)
     }
 
     private fun drawShadow(canvas: Canvas) {

@@ -10,6 +10,7 @@
         <attr name="corner_radius" format="dimension" />
         <attr name="blur_radius" format="dimension" />
         <attr name="border_color" format="color"/>
+        <attr name="card_background_color" format="color"/>
         <attr name="enable_shadow_top" format="boolean"/>
         <attr name="enable_shadow_bottom" format="boolean"/>
         <attr name="enable_shadow_start" format="boolean"/>
