@@ -96,7 +96,7 @@
 
 ```
 	dependencies {
-	        implementation 'com.github.SSong-develop:SelectableShadowPositionsView:1.0.1-alpha02'
+	        implementation 'com.github.SSong-develop:SelectableShadowPositionsView:1.0.3'
 	}
 ```
 
