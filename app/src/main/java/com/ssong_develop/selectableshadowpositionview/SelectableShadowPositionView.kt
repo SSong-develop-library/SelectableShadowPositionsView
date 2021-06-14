@@ -156,6 +156,9 @@ class SelectableShadowPositionView @JvmOverloads constructor(
         background =
             MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(cornerRadius)).apply {
                 fillColor = ColorStateList.valueOf(layoutBackgroundColor)
+                this@SelectableShadowPositionView.let {
+                    setPadding(it.paddingLeft,it.paddingTop,it.paddingRight,it.paddingBottom)
+                }
             }
     }
 
