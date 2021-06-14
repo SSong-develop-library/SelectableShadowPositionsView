@@ -6,10 +6,25 @@ import android.graphics.*
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
+import androidx.core.view.marginRight
+import androidx.core.view.marginStart
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.ssong_develop.selectableshadowpositionview.Utils.dpToPixelFloat
 
+/**
+ * 함수의 구조를 조금 바꿔야 될거 같아요
+ * 지금 현재 layoutParam을 바꾸게 되면 그림이 되게 이상해지는데
+ * onSizeChanged메소드가 호출됐을때 이를 다시한번 그려줄 수 있는 무언가가 필요해보입니다.
+ *
+ * 구조를 다시 한번 생각해보자
+ * updateShadow -> top , bottom , start , end shadow update
+ * updateBorder
+ * updateBackground
+ * 함수를 만들어 주고
+ *
+ * size가 change되면 그에 맞게 처리해준다.
+ */
 class SelectableShadowPositionView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
@@ -142,16 +157,31 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         if (enableShadow) {
-            initializeShadowPaint()
-            drawShadow(canvas)
+            canvas.apply {
+                drawPath(shadowTopPath,shadowPaint)
+                drawPath(shadowBottomPath,shadowPaint)
+                drawPath(shadowStartPath,shadowPaint)
+                drawPath(shadowEndPath,shadowPaint)
+            }
         }
-        drawLayoutBackground(canvas)
         if (enableBorder)
-            drawBorder(canvas)
+            canvas.drawRoundRect(borderRectF, cornerRadius, cornerRadius, borderPaint)
+        canvas.drawRoundRect(layoutBackgroundRectF, cornerRadius, cornerRadius, layoutPaint)
+
         super.onDraw(canvas)
     }
 
-    private fun initializeShadowPaint() {
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        updateShadow()
+        updateBorder()
+        updateLayout()
+        updateBackground()
+    }
+
+    private fun updateShadow() {
+        val useableWidth = width - (paddingLeft + paddingRight)
+        val useableHeight = height - (paddingLeft + paddingRight)
         shadowPaint.apply {
             isAntiAlias = true
             style = Paint.Style.STROKE
@@ -160,78 +190,33 @@ class SelectableShadowPositionView @JvmOverloads constructor(
             xfermode = porterDuffXferMode
             maskFilter = blurMaskFilter
         }
-    }
-
-    private fun drawShadow(canvas: Canvas) {
-        if (enableShadowTop) drawShadowTop(canvas)
-        if (enableShadowBottom) drawShadowBottom(canvas)
-        if (enableShadowStart) drawShadowStart(canvas)
-        if (enableShadowEnd) drawShadowEnd(canvas)
-    }
-
-    private fun drawShadowTop(canvas: Canvas) {
         shadowTopPath.apply {
             reset()
-            moveTo((width + shadowEndOffset), shadowTopOffset)
+            moveTo((useableWidth + shadowEndOffset), shadowTopOffset)
             lineTo(shadowStartOffset, shadowTopOffset)
         }
-        canvas.drawPath(shadowTopPath, shadowPaint)
-        canvas.save()
-    }
-
-    private fun drawShadowStart(canvas: Canvas) {
         shadowStartPath.apply {
             reset()
             moveTo(shadowStartOffset, shadowTopOffset)
-            lineTo(shadowStartOffset, (height + shadowBottomOffset))
+            lineTo(shadowStartOffset, (useableHeight + shadowBottomOffset))
         }
-        canvas.drawPath(shadowStartPath, shadowPaint)
-        canvas.save()
-    }
-
-    private fun drawShadowBottom(canvas: Canvas) {
         shadowBottomPath.apply {
             reset()
-            moveTo(shadowStartOffset, (height + shadowBottomOffset))
-            lineTo((width + shadowEndOffset), (height + shadowBottomOffset))
+            moveTo(shadowStartOffset, (useableHeight + shadowBottomOffset))
+            lineTo((useableWidth + shadowEndOffset), (useableHeight + shadowBottomOffset))
         }
-        canvas.drawPath(shadowBottomPath, shadowPaint)
-        canvas.save()
-    }
-
-    private fun drawShadowEnd(canvas: Canvas) {
         shadowEndPath.apply {
             reset()
-            moveTo((width + shadowEndOffset), (height + shadowBottomOffset))
-            lineTo((width + shadowEndOffset), shadowTopOffset)
+            moveTo((useableWidth + shadowEndOffset), (useableHeight + shadowBottomOffset))
+            lineTo((useableWidth + shadowEndOffset), shadowTopOffset)
         }
-        canvas.drawPath(shadowEndPath, shadowPaint)
-        canvas.save()
+
+        invalidate()
     }
 
-    private fun drawLayoutBackground(canvas: Canvas) {
-        layoutPaint.apply {
-            style = Paint.Style.FILL
-            color = layoutBackgroundColor
-            xfermode = porterDuffXferMode
-        }
-
-        layoutBackgroundRectF.apply {
-            top = 0f
-            left = 0f
-            right = width.toFloat()
-            bottom = height.toFloat()
-        }
-
-        layoutBackgroundPath.apply {
-            reset()
-            addRect(layoutBackgroundRectF, Path.Direction.CW)
-        }
-
-        canvas.drawRoundRect(layoutBackgroundRectF, cornerRadius, cornerRadius, layoutPaint)
-    }
-
-    private fun drawBorder(canvas: Canvas) {
+    private fun updateBorder() {
+        val useableWidth = width - (paddingLeft + paddingRight)
+        val useableHeight = height - (paddingLeft + paddingRight)
         borderPaint.apply {
             style = Paint.Style.STROKE
             color = borderColor
@@ -241,11 +226,31 @@ class SelectableShadowPositionView @JvmOverloads constructor(
         borderRectF.apply {
             top = 0f
             left = 0f
-            right = width.toFloat()
-            bottom = height.toFloat()
+            right = useableWidth.toFloat()
+            bottom = useableHeight.toFloat()
         }
-
-        canvas.drawRoundRect(borderRectF, cornerRadius, cornerRadius, borderPaint)
+        invalidate()
     }
 
+    private fun updateLayout() {
+        val useableWidth = width - (paddingLeft + paddingRight)
+        val useableHeight = height - (paddingLeft + paddingRight)
+        layoutPaint.apply {
+            style = Paint.Style.FILL
+            color = layoutBackgroundColor
+            xfermode = porterDuffXferMode
+        }
+        layoutBackgroundRectF.apply {
+            top = 0f
+            left = 0f
+            right = useableWidth.toFloat()
+            bottom = useableHeight.toFloat()
+        }
+        layoutBackgroundPath.apply {
+            reset()
+            addRect(layoutBackgroundRectF, Path.Direction.CW)
+        }
+
+        invalidate()
+    }
 }
