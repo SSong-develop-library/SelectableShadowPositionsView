@@ -24,6 +24,10 @@ import com.ssong_develop.selectableshadowpositionview.Utils.dpToPixelFloat
  * 함수를 만들어 주고
  *
  * size가 change되면 그에 맞게 처리해준다.
+ *
+ * 상단 문제 해결
+ *
+ * 이제 문제는 padding임
  */
 class SelectableShadowPositionView @JvmOverloads constructor(
     context: Context,
@@ -181,7 +185,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     private fun updateShadow() {
         val useableWidth = width - (paddingLeft + paddingRight)
-        val useableHeight = height - (paddingLeft + paddingRight)
+        val useableHeight = height - (paddingTop + paddingBottom)
         shadowPaint.apply {
             isAntiAlias = true
             style = Paint.Style.STROKE
@@ -216,7 +220,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     private fun updateBorder() {
         val useableWidth = width - (paddingLeft + paddingRight)
-        val useableHeight = height - (paddingLeft + paddingRight)
+        val useableHeight = height - (paddingTop + paddingBottom)
         borderPaint.apply {
             style = Paint.Style.STROKE
             color = borderColor
@@ -234,7 +238,7 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     private fun updateLayout() {
         val useableWidth = width - (paddingLeft + paddingRight)
-        val useableHeight = height - (paddingLeft + paddingRight)
+        val useableHeight = height - (paddingTop + paddingBottom)
         layoutPaint.apply {
             style = Paint.Style.FILL
             color = layoutBackgroundColor
