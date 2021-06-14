@@ -1,13 +1,10 @@
 package com.ssong_develop.selectableshadowpositionview
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.*
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
-import androidx.core.view.marginRight
-import androidx.core.view.marginStart
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.ssong_develop.selectableshadowpositionview.Utils.dpToPixelFloat
@@ -154,21 +151,16 @@ class SelectableShadowPositionView @JvmOverloads constructor(
 
     private fun updateBackground() {
         background =
-            MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(cornerRadius)).apply {
-                fillColor = ColorStateList.valueOf(layoutBackgroundColor)
-                this@SelectableShadowPositionView.let {
-                    setPadding(it.paddingLeft,it.paddingTop,it.paddingRight,it.paddingBottom)
-                }
-            }
+            MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(cornerRadius))
     }
 
     override fun onDraw(canvas: Canvas) {
         if (enableShadow) {
             canvas.apply {
-                drawPath(shadowTopPath,shadowPaint)
-                drawPath(shadowBottomPath,shadowPaint)
-                drawPath(shadowStartPath,shadowPaint)
-                drawPath(shadowEndPath,shadowPaint)
+                drawPath(shadowTopPath, shadowPaint)
+                drawPath(shadowBottomPath, shadowPaint)
+                drawPath(shadowStartPath, shadowPaint)
+                drawPath(shadowEndPath, shadowPaint)
             }
         }
         if (enableBorder)
