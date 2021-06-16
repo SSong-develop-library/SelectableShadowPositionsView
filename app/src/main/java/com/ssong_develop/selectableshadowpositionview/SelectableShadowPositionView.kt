@@ -189,25 +189,34 @@ class SelectableShadowPositionView @JvmOverloads constructor(
             xfermode = porterDuffXferMode
             maskFilter = blurMaskFilter
         }
-        shadowTopPath.apply {
-            reset()
-            moveTo((useableWidth + shadowEndOffset), shadowTopOffset)
-            lineTo(shadowStartOffset, shadowTopOffset)
+
+        if(enableShadowTop){
+            shadowTopPath.apply {
+                reset()
+                moveTo((useableWidth + shadowEndOffset), shadowTopOffset)
+                lineTo(shadowStartOffset, shadowTopOffset)
+            }
         }
-        shadowStartPath.apply {
-            reset()
-            moveTo(shadowStartOffset, shadowTopOffset)
-            lineTo(shadowStartOffset, (useableHeight + shadowBottomOffset))
+        if(enableShadowStart){
+            shadowStartPath.apply {
+                reset()
+                moveTo(shadowStartOffset, shadowTopOffset)
+                lineTo(shadowStartOffset, (useableHeight + shadowBottomOffset))
+            }
         }
-        shadowBottomPath.apply {
-            reset()
-            moveTo(shadowStartOffset, (useableHeight + shadowBottomOffset))
-            lineTo((useableWidth + shadowEndOffset), (useableHeight + shadowBottomOffset))
+        if(enableShadowBottom){
+            shadowBottomPath.apply {
+                reset()
+                moveTo(shadowStartOffset, (useableHeight + shadowBottomOffset))
+                lineTo((useableWidth + shadowEndOffset), (useableHeight + shadowBottomOffset))
+            }
         }
-        shadowEndPath.apply {
-            reset()
-            moveTo((useableWidth + shadowEndOffset), (useableHeight + shadowBottomOffset))
-            lineTo((useableWidth + shadowEndOffset), shadowTopOffset)
+        if(enableShadowEnd){
+            shadowEndPath.apply {
+                reset()
+                moveTo((useableWidth + shadowEndOffset), (useableHeight + shadowBottomOffset))
+                lineTo((useableWidth + shadowEndOffset), shadowTopOffset)
+            }
         }
 
         invalidate()
